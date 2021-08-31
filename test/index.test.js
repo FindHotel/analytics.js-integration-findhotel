@@ -212,6 +212,16 @@ describe('Segment.io', function() {
         analytics.assert(object.context.userAgent === navigator.userAgent);
       });
 
+      it('should add .campaign if no location.search', function() {
+        Segment.global = { navigator: {}, location: {} };
+        Segment.global.location.hostname = 'localhost';
+        segment.normalize(object);
+        analytics.assert(object);
+        analytics.assert(object.context);
+        analytics.assert(object.context.campaign);
+        Segment.global = window;
+      });
+
       it('should add .campaign', function() {
         Segment.global = { navigator: {}, location: {} };
         Segment.global.location.search = '?utm_source=source&utm_medium=medium&utm_term=term&utm_content=content&utm_campaign=name';
